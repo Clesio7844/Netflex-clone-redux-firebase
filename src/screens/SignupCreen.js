@@ -1,21 +1,47 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './SignupCreen.css';
+import { auth } from '../firebase';
 
 function SignupCreen() {
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+
   const register = e => {
     e.preventDefault();
+
+    auth
+      .createUserWithEmailAndPassword(
+        emailRef.current.value,
+        passwordRef.current.value
+      )
+      .then(authUser => {
+        console.log(authUser);
+      })
+      .catch(error => {
+        alert(error.message);
+      });
   };
 
   const signIn = e => {
     e.preventDefault();
+
+    auth
+      .signInWithEmailAndPassword(
+        emailRef.current.value,
+        passwordRef.current.value
+      )
+      .then(authUser => {
+        console.log(authUser);
+      })
+      .catch(error => alert(error.message));
   };
 
   return (
     <div className='sungupScreen'>
       <form>
         <h1>Sign In</h1>
-        <input placeholder='Email' type='email' />
-        <input placeholder='Possword' type='password' />
+        <input ref={emailRef} placeholder='Email' type='email' />
+        <input ref={passwordRef} placeholder='Possword' type='password' />
         <button type='subminy' onClick={signIn}>
           Sign In
         </button>
